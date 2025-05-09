@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet"
+        href="{% static 'admin/css/custom_admin.css' %}">
+{% endblock %}
+
+{% block title %}Панель управления Seneca Partners{% endblock %}
+
+{% block branding %}
+  <div id="branding">
+    <a href="{% url 'admin:index' %}">
+      <img src="{% static 'images/logo.png' %}"
+           alt="Seneca" style="height:40px;vertical-align:middle;">
+      <span style="
+        font-family:'BrandFont',sans-serif;
+        color:#fff;
+        font-size:1.5em;
+        margin-left:10px;
+      ">Seneca Partners</span>
+    </a>
+  </div>
+{% endblock %}

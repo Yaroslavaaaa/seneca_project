@@ -1,0 +1,103 @@
+/* 1) Подключаем фирменный шрифт */
+@font-face {
+  font-family: 'PFCentroSansPro-Medium';
+  src: url('../fonts/PFCentroSansPro-Medium.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --brand-primary:   rgb(5 41 32);  /* ваш цвет */
+  /*--brand-secondary: #004C97;  !* ваш цвет *!*/
+  --brand-light:     #F8F8F8;
+  --brand-dark:      #333333;
+}
+
+/* 1) Шрифт */
+@font-face {
+  font-family: 'PFCentroSansPro-Medium';
+  src: url('../fonts/PFCentroSansPro-Medium.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 2) Хеадер */
+#header {
+  background-color: var(--brand-primary) !important;
+}
+#header h1#site-name a,  /* заголовок */
+#header #user-tools a {  /* ссылки справа */
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+  color: #fff !important;
+}
+
+
+svg.theme-label-when-light use{
+  background-color: rgba(5, 41, 32);
+}
+
+
+
+.module caption{
+  background-color: rgba(5, 41, 32, 0.8);
+}
+
+
+div.breadcrumbs, #changelist-filter-header, input[name=_addanother], input[name=_continue]{
+  background-color: rgba(5, 41, 32, 0.8);
+}
+
+li.selected{
+  color: rgba(5, 41, 32, 0.8);
+}
+
+
+table tr:nth-child(odd) {
+  background-color: rgba(175, 149, 120, 0.3); /* светлый цвет */
+}
+
+table tr:nth-child(even), #content-related {
+  background-color: rgba(175, 149, 120, 0.1); /* чуть темнее */
+}
+
+/* 3) Сайдбар */
+#nav-sidebar {
+  background-color: var(--brand-secondary) !important;
+}
+#nav-sidebar ul.model-list li a {
+  color: #fff !important;
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+}
+
+/* 4) Таблица списка (ChangeList) */
+#changelist-form table#result_list th {
+  background-color: var(--brand-secondary) !important;
+  color: #fff !important;
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+}
+#changelist-form table#result_list td {
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+}
+
+/* 5) Кнопки */
+input[type=submit].default, .button {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+  color: #fff !important;
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+}
+
+/* 6) Fieldset заголовки в формах */
+fieldset.module h2 {
+  border-bottom: 2px solid var(--brand-primary) !important;
+  color: var(--brand-primary) !important;
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+}
+
+/* 7) Подвал */
+#footer {
+  background-color: var(--brand-light) !important;
+  color: var(--brand-dark) !important;
+  font-family: 'PFCentroSansPro-Medium', sans-serif !important;
+  font-size: 0.85em;
+}
