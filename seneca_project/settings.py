@@ -149,3 +149,23 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+
+
+
+ADMINS = [
+    ('Менеджер', 'yaroslava.vuiko@gmail.com'),
+]
+
+
+
+# Настройки почтового сервера
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST      = 'smtp.gmail.com'
+EMAIL_PORT      = 587
+EMAIL_HOST_USER = 'yaroslava.vuiko@narxoz.kz'
+EMAIL_HOST_PASSWORD = 'ixkn alnp jzuq eeow'
+EMAIL_USE_TLS   = True
+
+# От кого
+DEFAULT_FROM_EMAIL = 'yaroslava.vuiko@narxoz.kz'

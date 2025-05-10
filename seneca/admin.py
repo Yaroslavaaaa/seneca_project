@@ -10,12 +10,51 @@ from django.utils.html import format_html
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.urls import path, reverse
+from .views import *
+from django.contrib.admin import AdminSite
+
 
 
 admin.site.site_header  = "Seneca Partners CMS"
 admin.site.site_title   = "Seneca Admin"
 admin.site.index_title  = "Панель управления объектом"
 admin.site.site_url = "https://seneca.kz/"
+
+
+
+
+class ObjectAdminSite(AdminSite):
+    site_header  = "Админка строй-объекта"
+    site_title   = "Строй-CMS"
+    index_title  = "Управление контентом"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            # все пути будут автоматически под префиксом /admin/
+            path(
+                'internal/data-integrity/',
+                self.admin_view(DataIntegrityView.as_view()),
+                name='data_integrity'
+            ),
+            path(
+                'internal/link-checker/',
+                self.admin_view(LinkCheckerView.as_view()),
+                name='link_checker'
+            ),
+            path(
+                'reports/applications-summary/',
+                self.admin_view(ApplicationSummaryView.as_view()),
+                name='applications_summary'
+            ),
+        ]
+        return custom + urls
+
+object_admin = ObjectAdminSite(name='object_admin')
+
+# регистрируем модели
+for model in (Block, Floor, Plan, Photo, Video, Application):
+    object_admin.register(model)
 
 
 class SiteAwareAdmin(admin.ModelAdmin):

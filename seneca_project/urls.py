@@ -21,6 +21,7 @@ from rest_framework.routers import DefaultRouter
 from seneca.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from seneca.admin import object_admin
 
 
 
@@ -33,6 +34,9 @@ router.register(r'floors', FloorViewSet)
 router.register(r'plans', PlanViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', object_admin.urls),
     path('api/', include(router.urls)),
+    path('internal/data-integrity/', DataIntegrityView.as_view(), name='data_integrity'),
+    path('internal/link-checker/', LinkCheckerView.as_view(), name='link_checker'),
+    path('reports/applications-summary/', ApplicationSummaryView.as_view(), name='applications_summary'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

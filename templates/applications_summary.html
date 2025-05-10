@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+  <h1>Сводка по заявкам</h1>
+
+  <form method="get" class="form-inline" style="margin-bottom:1em;">
+    <div class="form-group">
+      <label for="id_start_date">С:</label>
+      <input type="date" id="id_start_date" name="start_date"
+             value="{{ start_date }}" class="form-control" />
+    </div>
+    <div class="form-group" style="margin-left:1em;">
+      <label for="id_end_date">По:</label>
+      <input type="date" id="id_end_date" name="end_date"
+             value="{{ end_date }}" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="margin-left:1em;">
+      Показать
+    </button>
+    <a href="{% url 'applications_summary' %}" class="btn btn-default" style="margin-left:0.5em;">
+      Сброс
+    </a>
+  </form>
+
+  <table class="table table-striped">
+    <tr><th>Период</th>
+        <td>
+          {% if start_date or end_date %}
+            {{ start_date|default:"—" }} &mdash;
+            {{ end_date|default:"—" }}
+          {% else %}
+            за всё время
+          {% endif %}
+        </td>
+    </tr>
+    <tr><th>Всего заявок</th>     <td>{{ total_count }}</td></tr>
+    <tr><th>Закрытых заявок</th>  <td>{{ closed_count }}</td></tr>
+    <tr><th>Конверсия, %</th>     <td>{{ conversion_rate }}</td></tr>
+    <tr>
+      <th>Среднее время обработки</th>
+      <td>
+        {% if avg_processing_time %}
+          {{ avg_days }} д {{ avg_hours }} ч
+          {{ avg_minutes }} м {{ avg_seconds }} с
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+{% endblock %}

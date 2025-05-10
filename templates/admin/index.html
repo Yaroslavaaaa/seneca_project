@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+  {{ block.super }}
+
+  <div class="module" id="utilities-module">
+    <h2 id="utilities-header"
+      style="
+               background-color: rgba(5, 41, 32, 0.8);
+               color: #ffffff;
+             ">Утилиты и отчёты</h2>
+    <ul>
+      <li>
+        <a href="{% url 'object_admin:data_integrity' %}">
+          Проверка целостности данных
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'object_admin:link_checker' %}">
+          Проверка ссылок
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'object_admin:applications_summary' %}">
+          Сводка по заявкам
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endblock %}

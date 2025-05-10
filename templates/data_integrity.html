@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Отчёт целостности данных{% endblock %}
+{% block content %}
+  <h1>Отчёт целостности данных</h1>
+
+  <h2>Этажи без чертежей</h2>
+  <ul>
+    {% for floor in floors_missing_plan %}
+      <li>
+        Floor {{ floor.id }} — Блок {{ floor.block.name }}, {{ floor.get_level_display }}
+      </li>
+    {% empty %}
+      <li>Все этажи имеют чертежи.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Блоки без этажей</h2>
+  <ul>
+    {% for block in blocks_without_floors %}
+      <li>
+        Block {{ block.id }} — {{ block.name }}
+      </li>
+    {% empty %}
+      <li>У всех блоков есть хотя бы один этаж.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
