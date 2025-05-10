@@ -17,7 +17,16 @@ class VideoSerializer(serializers.ModelSerializer):
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
-        fields = ['id', 'name', 'phone']
+        fields = [
+            'id',
+            'name',
+            'phone',
+            'status',
+            'comment',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['created_at', 'updated_at']
 
 
 class BlockSerializer(serializers.ModelSerializer):

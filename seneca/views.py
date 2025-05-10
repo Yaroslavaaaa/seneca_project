@@ -43,9 +43,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     ordering_fields  = ['created_at', 'updated_at']
     ordering         = ['-created_at']
 
-    # def get_queryset(self):
-    #     current_site = get_current_site(self.request)
-    #     return super().get_queryset().filter(site=current_site)
+
 
 
 class BlockViewSet(viewsets.ModelViewSet):

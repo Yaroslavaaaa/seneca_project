@@ -82,22 +82,17 @@ class ApplicationAdmin(admin.ModelAdmin):
     actions        = ['export_applications_xlsx']
 
     def export_applications_xlsx(self, request, queryset):
-        """
-        Экспорт выбранных заявок в файл Excel (XLSX).
-        """
-        # 1) Создаём книгу и лист
+
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = 'Заявки'
 
-        # 2) Заголовки столбцов
         headers = [
             'ID', 'Имя', 'Телефон', 'Статус',
             'Комментарий', 'Дата создания'
         ]
         ws.append(headers)
 
-        # 3) Данные заявок
         for obj in queryset.order_by('-created_at'):
             ws.append([
                 obj.id,
@@ -108,7 +103,6 @@ class ApplicationAdmin(admin.ModelAdmin):
                 obj.created_at.strftime('%Y-%m-%d %H:%M'),
             ])
 
-        # 4) Сохраняем в поток и возвращаем как Response
         output = BytesIO()
         wb.save(output)
         output.seek(0)
