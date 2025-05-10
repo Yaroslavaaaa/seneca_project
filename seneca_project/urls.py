@@ -16,9 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls.static import static
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from seneca.views import *
 from django.conf import settings
+from django.conf.urls.static import static
+
+
+
+router = DefaultRouter()
+router.register(r'photos', PhotoViewSet)
+router.register(r'videos', VideoViewSet)
+router.register(r'applications', ApplicationViewSet, basename='application')
+router.register(r'blocks', BlockViewSet)
+router.register(r'floors', FloorViewSet)
+router.register(r'plans', PlanViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
