@@ -12,24 +12,36 @@ import requests
 from urllib.parse import urlencode
 from django.db.models import F, DurationField, ExpressionWrapper, Avg, Count, Q
 import datetime
+from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework.permissions import IsAdminUser
 
 
 
+
+class IsAdminOrReadOnly(BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        return bool(request.user and request.user.is_staff)
 
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):
 
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 
@@ -49,6 +61,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 class BlockViewSet(viewsets.ModelViewSet):
     queryset = Block.objects.all()
     serializer_class = BlockSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
         current_site = get_current_site(self.request)
@@ -58,6 +71,7 @@ class BlockViewSet(viewsets.ModelViewSet):
 class FloorViewSet(viewsets.ModelViewSet):
     queryset = Floor.objects.select_related('block').all()
     serializer_class = FloorSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
         current_site = get_current_site(self.request)
@@ -67,6 +81,7 @@ class FloorViewSet(viewsets.ModelViewSet):
 class PlanViewSet(viewsets.ModelViewSet):
     queryset = Plan.objects.select_related('floor__block').all()
     serializer_class = PlanSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
         current_site = get_current_site(self.request)
@@ -78,6 +93,7 @@ class PlanViewSet(viewsets.ModelViewSet):
 @method_decorator(staff_member_required, name='dispatch')
 class DataIntegrityView(TemplateView):
     template_name = 'data_integrity.html'
+    permission_classes = [IsAdminUser]
 
     def get_context_data(self, **kwargs):
         floors_missing_plan = Floor.objects.filter(plan__isnull=True)
@@ -128,6 +144,7 @@ class LinkCheckerView(TemplateView):
     template_name = 'link_checker.html'
     timeout = 3
     URL_PATTERN = re.compile(r'https?://[^\s\'"]+')
+    permission_classes = [IsAdminUser]
 
     def extract_urls(self):
         urls = []
@@ -219,6 +236,7 @@ class LinkCheckerView(TemplateView):
 @method_decorator(staff_member_required, name='dispatch')
 class ApplicationSummaryView(TemplateView):
     template_name = 'applications_summary.html'
+    permission_classes = [IsAdminUser]
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
