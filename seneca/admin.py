@@ -22,7 +22,6 @@ admin.site.site_url = "https://seneca.kz/"
 
 
 
-
 class ObjectAdminSite(AdminSite):
     site_header  = "Админка строй-объекта"
     site_title   = "Строй-CMS"
@@ -31,7 +30,6 @@ class ObjectAdminSite(AdminSite):
     def get_urls(self):
         urls = super().get_urls()
         custom = [
-            # все пути будут автоматически под префиксом /admin/
             path(
                 'internal/data-integrity/',
                 self.admin_view(DataIntegrityView.as_view()),
@@ -52,13 +50,12 @@ class ObjectAdminSite(AdminSite):
 
 object_admin = ObjectAdminSite(name='object_admin')
 
-# регистрируем модели
-for model in (Block, Floor, Plan, Photo, Video, Application):
+for model in (Block, Floor, Plan, Photo, Video, Application, Bank):
     object_admin.register(model)
 
 
 class SiteAwareAdmin(admin.ModelAdmin):
-    list_filter = ('site',)         # возможность быстро выбрать сайт
+    list_filter = ('site',)
     readonly_fields = ('site',)
 
 
@@ -201,3 +198,11 @@ class ProposalAdmin(admin.ModelAdmin):
             )
         return "-"
     download_link.short_description = "PDF"
+
+
+
+
+@admin.register(Bank)
+class BankAdmin(admin.ModelAdmin):
+    list_display = ('name', 'rate')
+    search_fields = ('name',)

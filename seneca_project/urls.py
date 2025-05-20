@@ -32,6 +32,7 @@ router.register(r'applications', ApplicationViewSet, basename='application')
 router.register(r'blocks', BlockViewSet)
 router.register(r'floors', FloorViewSet)
 router.register(r'plans', PlanViewSet)
+router.register(r'banks', BankViewSet, basename='bank')
 
 urlpatterns = [
     path('admin/', object_admin.urls),

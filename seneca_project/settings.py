@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'seneca.apps.SenecaConfig',
     'django_filters',
-    'ckeditor'
+    'ckeditor',
+    'corsheaders',
 ]
 
 
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'seneca_project.urls'
@@ -167,5 +169,10 @@ EMAIL_HOST_USER = 'yaroslava.vuiko@narxoz.kz'
 EMAIL_HOST_PASSWORD = 'ixkn alnp jzuq eeow'
 EMAIL_USE_TLS   = True
 
-# От кого
 DEFAULT_FROM_EMAIL = 'yaroslava.vuiko@narxoz.kz'
+
+CORS_ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True

@@ -47,6 +47,21 @@ class SiteAware(models.Model):
     class Meta:
         abstract = True
 
+
+
+
+class Bank(models.Model):
+    name = models.CharField(max_length=200, unique=True, verbose_name='Название')
+    rate = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Годовая ставка (%)',
+        help_text='В процентах, например 8.50'
+    )
+
+    def __str__(self):
+        return f'{self.name} ({self.rate}%)'
+
 #Dilnaz
 class Photo(SiteAware):
     image = models.ImageField(upload_to='photos/')
@@ -60,6 +75,7 @@ class Video(SiteAware):
     description = models.TextField(blank=True)
     year = models.CharField(max_length=4)
     month = models.CharField(max_length=20)
+    date = models.CharField(max_length=2)
 
     def __str__(self):
         return self.youtube_link

@@ -14,6 +14,8 @@ from django.db.models import F, DurationField, ExpressionWrapper, Avg, Count, Q
 import datetime
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.decorators import action
 
 
 
@@ -25,23 +27,91 @@ class IsAdminOrReadOnly(BasePermission):
             return True
         return bool(request.user and request.user.is_staff)
 
+
+
+class BankViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = Bank.objects.all().order_by('name')
+    serializer_class = BankSerializer
+
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+    # подключаем django-filter
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['caption']
+
+    def get_queryset(self):
+        current_site = get_current_site(self.request)
+        return super().get_queryset().filter(site=current_site)
+
+
+MONTH_ORDER = {
+    'Январь': 1, 'Февраль': 2, 'Март': 3, 'Апрель': 4,
+    'Май': 5, 'Июнь': 6, 'Июль': 7, 'Август': 8,
+    'Сентябрь': 9, 'Октябрь': 10, 'Ноябрь': 11, 'Декабрь': 12,
+}
 
 class VideoViewSet(viewsets.ModelViewSet):
-    queryset = Video.objects.all()
     serializer_class = VideoSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    queryset = Video.objects.all()
+
+    def get_queryset(self):
+
+        current_site = get_current_site(self.request)
+        qs = super().get_queryset().filter(site=current_site)
+
+        year = self.request.query_params.get('year')
+        if year:
+            qs = qs.filter(year=year)
+
+        month = self.request.query_params.get('month')
+        if month:
+            qs = qs.filter(month=month)
+
+        return qs
+
+    @action(detail=False, methods=['get'])
+    def years(self, request):
+
+        current_site = get_current_site(request)
+        years = (
+            Video.objects
+                 .filter(site=current_site)
+                 .values_list('year', flat=True)
+                 .distinct()
+        )
+        return Response(sorted(years, reverse=True))
+
+    @action(detail=False, methods=['get'])
+    def months(self, request):
+
+        year = request.query_params.get('year')
+        if not year:
+            return Response([], status=400)
+
+        current_site = get_current_site(request)
+        months = (
+            Video.objects
+                 .filter(site=current_site, year=year)
+                 .values_list('month', flat=True)
+                 .distinct()
+        )
+        sorted_months = sorted(
+            months,
+            key=lambda m: MONTH_ORDER.get(m, 0),
+            reverse=True
+        )
+        return Response(sorted_months)
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):
 
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    # permission_classes = [IsAdminOrReadOnly]
 
 
 
@@ -75,13 +145,21 @@ class FloorViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         current_site = get_current_site(self.request)
-        return super().get_queryset().filter(site=current_site)
+        qs = super().get_queryset().filter(site=current_site)
 
+        block_id = self.request.query_params.get('block')
+        if block_id:
+            qs = qs.filter(block_id=block_id)
+
+        return qs
 
 class PlanViewSet(viewsets.ModelViewSet):
     queryset = Plan.objects.select_related('floor__block').all()
     serializer_class = PlanSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['floor']
 
     def get_queryset(self):
         current_site = get_current_site(self.request)
@@ -155,7 +233,6 @@ class LinkCheckerView(TemplateView):
                 'field': 'youtube_link',
                 'url': v.youtube_link,
             })
-            # 2) любые URL в description
             for match in self.URL_PATTERN.findall(v.description or ''):
                 urls.append({
                     'model': 'Video',
@@ -164,7 +241,6 @@ class LinkCheckerView(TemplateView):
                     'url': match,
                 })
 
-        # 3) URL внутри Plan.description
         for p in Plan.objects.all():
             for match in self.URL_PATTERN.findall(p.description or ''):
                 urls.append({

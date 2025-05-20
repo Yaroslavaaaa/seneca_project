@@ -7,6 +7,11 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = ['id', 'image', 'caption']
 
+class BankSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bank
+        fields = ('id', 'name', 'rate')
+
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,10 +42,11 @@ class BlockSerializer(serializers.ModelSerializer):
 
 class FloorSerializer(serializers.ModelSerializer):
     block = BlockSerializer(read_only=True)
+    level_display = serializers.CharField(source='get_level_display', read_only=True)
 
     class Meta:
         model = Floor
-        fields = ['id', 'block', 'level']
+        fields = ['id', 'block', 'level', 'level_display',]
 
 
 class PlanSerializer(serializers.ModelSerializer):
