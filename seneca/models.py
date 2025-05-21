@@ -12,7 +12,6 @@ from django.conf import settings
 import os, io, html
 
 
-# Platypus
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -62,7 +61,7 @@ class Bank(models.Model):
     def __str__(self):
         return f'{self.name} ({self.rate}%)'
 
-#Dilnaz
+
 class Photo(SiteAware):
     image = models.ImageField(upload_to='photos/')
     caption = models.CharField(max_length=255, blank=True)
@@ -106,7 +105,6 @@ class Application(models.Model):
         return f'{self.name} — {self.phone}'
 
     def get_absolute_url(self):
-        # для редиректа после создания
         return reverse('thanks')
 
 

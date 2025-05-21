@@ -1,5 +1,3 @@
-# your_app/signals.py
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import mail_admins
@@ -18,5 +16,4 @@ def notify_admin_new_application(sender, instance, created, **kwargs):
         f'Телефон: {instance.phone}\n'
         f'Дата:  {instance.created_at.strftime("%Y-%m-%d %H:%M")}\n'
     )
-    # Отправим всем, кто в ADMINS
     mail_admins(subject, message)

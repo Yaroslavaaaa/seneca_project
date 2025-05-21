@@ -156,20 +156,20 @@ STATICFILES_DIRS = [
 
 
 ADMINS = [
-    ('Менеджер', 'yaroslava.vuiko@gmail.com'),
+    ('Менеджер', 'assem.kassenova@narxoz.kz'),
 ]
 
 
 
-# Настройки почтового сервера
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST      = 'smtp.gmail.com'
 EMAIL_PORT      = 587
-EMAIL_HOST_USER = 'yaroslava.vuiko@narxoz.kz'
-EMAIL_HOST_PASSWORD = 'ixkn alnp jzuq eeow'
+EMAIL_HOST_USER = 'assem.kassenova@narxoz.kz'
+EMAIL_HOST_PASSWORD = 'syzc psyz sygv ccux'
 EMAIL_USE_TLS   = True
 
-DEFAULT_FROM_EMAIL = 'yaroslava.vuiko@narxoz.kz'
+DEFAULT_FROM_EMAIL = 'assem.kassenova@narxoz.kz'
 
 CORS_ALLOWED_ORIGINS = [
   'http://localhost:3000',
